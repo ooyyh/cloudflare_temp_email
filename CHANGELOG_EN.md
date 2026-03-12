@@ -16,6 +16,7 @@
 ### Bug Fixes
 
 - fix: |Auto Reply| Fix auto-reply not triggering when `source_prefix` is empty string (#459), empty value now correctly matches all senders
+- fix: |GitHub Actions| Fix `backend_deploy.yaml` and `frontend_pagefunction_deploy.yaml` writing TOML via `echo '${{ secrets.TOML }}'`, which breaks when secrets contain single quotes or backslashes; now passed as env var and written with `printf`; also fix bash bug where `$?` was overwritten by the `if` condition, causing the real deploy exit code to be lost
 
 ### Testing
 

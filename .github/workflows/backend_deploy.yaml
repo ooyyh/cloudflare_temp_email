@@ -50,7 +50,7 @@ jobs:
           export debug_mode=${{ secrets.DEBUG_MODE }}
           export use_mail_wasm_parser=${{ secrets.BACKEND_USE_MAIL_WASM_PARSER }}
           cd worker/
-          echo '${{ secrets.BACKEND_TOML }}' > wrangler.toml
+          printf '%s\n' "$BACKEND_TOML" > wrangler.toml
           pnpm install --no-frozen-lockfile
 
           if [ -n "$use_mail_wasm_parser" ]; then
@@ -64,13 +64,14 @@ jobs:
             pnpm run deploy
           else
             output=$(pnpm run deploy 2>&1)
-            if [ $? -ne 0 ]; then
-                code=$?
-                echo "Command failed with exit code $code"
-                exit $code
+            deploy_code=$?
+            if [ $deploy_code -ne 0 ]; then
+                echo "Command failed with exit code $deploy_code"
+                exit $deploy_code
             fi
           fi
           echo "Deployed for tag ${{ github.ref_name }}"
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          BACKEND_TOML: ${{ secrets.BACKEND_TOML }}
