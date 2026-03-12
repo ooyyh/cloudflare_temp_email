@@ -16,6 +16,7 @@
 ### Bug Fixes
 
 - fix: |自动回复| 修复 `source_prefix` 为空字符串时自动回复不触发的问题（#459），空值现在正确匹配所有发件人
+- fix: |GitHub Actions| 修复 `backend_deploy.yaml` 和 `frontend_pagefunction_deploy.yaml` 中使用 `echo '${{ secrets.TOML }}'` 写入 TOML 文件的问题，改为通过环境变量传递并使用 `printf` 写入，避免 Secret 含单引号或反斜杠时导致 Shell 命令损坏或 TOML 解析失败；同时修复 `$?` 被 `if` 条件覆盖导致错误码丢失的 Bash 脚本 Bug
 
 ### Testing
 

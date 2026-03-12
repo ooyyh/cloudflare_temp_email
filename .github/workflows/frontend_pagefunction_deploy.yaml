@@ -51,10 +51,11 @@ jobs:
           pnpm install --no-frozen-lockfile
           pnpm build:pages
           cd ../pages/
-          echo '${{ secrets.PAGE_TOML }}' > wrangler.toml
+          printf '%s\n' "$PAGE_TOML" > wrangler.toml
           pnpm install --no-frozen-lockfile
           pnpm run deploy
           echo "Deploying production for ${{ github.ref_name }}"
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          PAGE_TOML: ${{ secrets.PAGE_TOML }}
